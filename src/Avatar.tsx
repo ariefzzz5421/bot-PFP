@@ -41,6 +41,12 @@ function HairBack({style,color}:{style:string;color:string}) {
 
 function HairFront({style,color}:{style:string;color:string}) {
   const dark='#1f1718';
+  if(style==='Wavy') return <>
+    <path d="M94 260c-28-79 1-150 67-185 47-26 89-22 128-18 65-8 115 31 132 91 15 49 4 100-24 137-12-29-26-45-45-51-11 20-34 34-60 39-26 6-48 3-69-9-22 29-59 43-94 37-19-3-29-18-35-41Z" fill={color}/>
+    <path d="M100 225c11-59 48-99 104-119-27 27-24 35-18 42 31-24 68-37 98-31-39 16-55 38-55 58 32-10 68-25 92-49-7 33-22 58-51 72-39 20-57 9-71 14-24 20-59 26-99 13Z" fill="#201919" opacity=".17"/>
+    <path d="M112 181c30-54 91-91 158-92-37 16-60 29-72 47 45-14 67-8 89-2-26 8-47 22-65 38-31-7-69-5-110 9Zm154-91c46-9 90 11 119 44-31-9-52-9-70-4 24 13 34 26 46 44-35-14-60-19-81-17 3-26-1-46-14-67Z" fill="#fff" opacity=".11"/>
+    <path d="M95 246c-2 54 9 85 31 105l8-84c18 26 43 26 59 22-35 39-61 42-98-43Zm299-8c25 44 21 97-4 135l-16-68c-15 15-39 24-61 22 33-30 59-51 81-89Z" fill={color}/>
+  </>;
   if(style==='Buzz cut') return <path d="M110 208c7-102 65-151 150-151 96 0 151 53 156 151-27-57-89-81-159-81-69 0-119 28-147 81Z" fill={color}/>;
   if(style==='Slick back') return <><path d="M106 241C92 121 156 54 260 57c108 0 159 72 153 172-61-48-105-69-162-55-74 18-111 55-145 67Z" fill={color}/><path d="M196 90c35-13 92-12 128 9" fill="none" stroke={dark} opacity=".14" strokeWidth="15" strokeLinecap="round"/></>;
   const bangs=/bang|fringe|bob|Sakura|Sailor/i.test(style);
@@ -111,7 +117,7 @@ function Art({avatar}:{avatar:AvatarState}) {
 }
 
 const frameTransforms:Record<string,string>={
-  'Corner peek':'translate(-90 -10) scale(1.06)','Side peek':'translate(124 28) scale(1.1)','Bottom peek':'translate(0 170) scale(.92)','Top peek':'translate(0 -132) scale(.92)','Close-up':'translate(-137 -98) scale(1.54)','Tilt peek':'translate(-64 68) rotate(-17 256 256) scale(1.11)','Half face':'translate(176 -58) scale(1.49)'
+  'Corner peek':'translate(-90 -10) rotate(8 256 256) scale(1.06)','Side peek':'translate(124 28) scale(1.1)','Bottom peek':'translate(0 170) scale(.92)','Top peek':'translate(0 -132) scale(.92)','Close-up':'translate(-137 -98) scale(1.54)','Tilt peek':'translate(-64 68) rotate(-17 256 256) scale(1.11)','Half face':'translate(176 -58) scale(1.49)'
 };
 
 export function Avatar({avatar,frame,x,y,width,height}:Props) {

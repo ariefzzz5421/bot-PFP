@@ -29,8 +29,8 @@ function HeadShape({kind,skin}:{kind:string;skin:string}) {
 }
 
 function HairBack({style,color}:{style:string;color:string}) {
-  if(style==='Buzz cut' || style==='Slick back') return null;
-  const long=/Long|Ponytail|Twin tails|Big waves|Layered bob|Shaggy|Curly/.test(style);
+  if(style==='Buzz cut' || style==='Slick back' || style==='Sage topknot') return null;
+  const long=/Long|Ponytail|Twin tails|Big waves|Layered bob|Shaggy|Curly|Emperor waves/.test(style);
   return <>
     <path d={long ? 'M100 245C73 98 184 55 279 64c111 4 168 90 148 221l36 198c-57 40-103 10-106-37l-2-114H154l-5 126c-37 42-78 24-76-25Z' : 'M100 255C75 140 141 65 262 62c130-6 186 82 166 204l-27 86-52-29H153l-43 42Z'} fill={color}/>
     {style==='Ponytail' && <path d="M398 155c75 33 99 112 61 185-16 31-45 53-70 49 43-85-16-139-27-177Z" fill={color}/>}
@@ -41,6 +41,39 @@ function HairBack({style,color}:{style:string;color:string}) {
 
 function HairFront({style,color}:{style:string;color:string}) {
   const dark='#1f1718';
+  if(style==='Pirate tousle') return <>
+    <path d="M92 251 81 196 105 198 96 139 130 151 143 91 180 114 213 56 245 83 286 51 313 83 359 73 366 119 408 117 399 164 429 186 405 239c-15-21-30-28-46-34-20 29-46 37-73 28-31 26-66 35-101 21-34 32-68 27-93-3Z" fill={color}/>
+    <path d="M120 161c37-48 79-70 128-77-28 18-42 40-48 61 42-23 76-31 105-26-32 13-50 34-60 52-44-7-81 0-125 27Z" fill="#fff" opacity=".1"/>
+    <path d="M97 227q23 19 56 3 27 42 68 17 40 21 70-13 40 18 71-23 18 10 37 24l-19 55q-22-24-40-42-55 49-103 37-35 20-66 4-37 32-71-9Z" fill={color}/>
+  </>;
+  if(style==='Swordsman spikes') return <>
+    <path d="M99 230 93 165 131 182 117 91 170 127 184 51 231 112 262 31 300 104 350 55 354 139 406 93 392 173 426 171 398 245q-62-45-143-42-75 1-156 27Z" fill={color}/>
+    <path d="m140 169 50-58-9 65m99-46 45-47-8 75" stroke="#adf0c2" strokeWidth="9" strokeLinecap="round" opacity=".27"/>
+  </>;
+  if(style==='Knight spikes') return <>
+    <path d="M93 246 75 166 118 184 105 111 150 128 174 62 213 110 256 51 288 103 347 56 353 133 410 99 395 173 431 205 406 247q-59-50-125-30-63 16-100 12-41 7-88 17Z" fill={color}/>
+    <path d="m143 149 36-50-5 73m110-51 38-38-6 72" stroke="#fff" strokeWidth="10" strokeLinecap="round" opacity=".26"/>
+  </>;
+  if(style==='Soul spikes') return <>
+    <path d="M91 253 70 195 111 195 97 117 151 141 176 54 220 118 259 25 297 108 359 54 358 135 414 92 398 168 443 191 407 249q-54-25-91-42-61 56-122 32-45 30-103 14Z" fill={color}/>
+    <path d="m156 137 27-54 12 54 67-74-13 93 80-67-20 75" stroke="#f9d3a2" strokeWidth="8" strokeLinecap="round" opacity=".25"/>
+  </>;
+  if(style==='Emperor waves') return <>
+    <path d="M105 199c3-90 65-147 157-145 93 1 157 62 154 155-41-22-65-69-93-87-4 54-20 92-63 124-26-42-51-76-64-117-21 29-43 53-91 70Z" fill={color}/>
+    <path d="M101 220q-35 118-11 237 30-34 41-98 19-80 22-147Zm310-4q36 108 9 241-33-27-45-92-16-78-14-145Z" fill={color}/>
+    <path d="M261 73q-5 73 0 132" stroke="#fff" strokeWidth="8" opacity=".13" fill="none"/>
+  </>;
+  if(style==='Star hair') return <path d="M99 228c-5-97 53-163 159-164 111 0 162 66 154 167l-50-40-72 38-73-29-71 44Z" fill={color}/>;
+  if(style==='Hunter spikes') return <>
+    <path d="M99 237 105 84 143 127 160-27 211 93 255-57 288 89 349-28 359 119 415 63 403 225q-49-29-91-23-37 5-56 37-44-36-85-32-40 2-72 30Z" fill={color}/>
+    <path d="M182 96 160-8m96 118 4-113m66 103 28-93" stroke="#75a579" strokeWidth="11" opacity=".35" strokeLinecap="round"/>
+  </>;
+  if(style==='Silver cloud') return <>
+    <path d="M102 261c-31-80 7-160 67-184 41-17 72-10 103-24 63-10 139 31 149 103 10 42 3 74-21 111-35-25-58-22-80-13-34-13-55-6-76 9-28-13-56-10-83 7-20-9-38-13-59-9Z" fill={color}/>
+    {[120,164,207,256,306,354,397].map((x,i)=><circle key={i} cx={x} cy={144+(i%2)*21} r={43+(i%3)*4} fill={color}/>)}
+    <path d="M118 182q23-27 56-23m41-44q28-17 56-3m47 32q24-8 46 6" stroke="#fff" strokeWidth="10" opacity=".28" strokeLinecap="round" fill="none"/>
+  </>;
+  if(style==='Sage topknot') return <><path d="M232 113q-23-45-14-80 10-31 39-32 27 2 39 32 6 34-16 80Z" fill={color}/><path d="M213 89q43 19 86 0" stroke="#eee" strokeWidth="14" fill="none"/><path d="M192 129q65-17 130 0" stroke={color} strokeWidth="15" opacity=".6" fill="none"/></>;
   if(style==='Wavy') return <>
     <path d="M94 260c-28-79 1-150 67-185 47-26 89-22 128-18 65-8 115 31 132 91 15 49 4 100-24 137-12-29-26-45-45-51-11 20-34 34-60 39-26 6-48 3-69-9-22 29-59 43-94 37-19-3-29-18-35-41Z" fill={color}/>
     <path d="M100 225c11-59 48-99 104-119-27 27-24 35-18 42 31-24 68-37 98-31-39 16-55 38-55 58 32-10 68-25 92-49-7 33-22 58-51 72-39 20-57 9-71 14-24 20-59 26-99 13Z" fill="#201919" opacity=".17"/>
@@ -69,6 +102,15 @@ function Outfit({kind,color}:{kind:string;color:string}) {
   const light=kind==='Blouse'||kind==='Shirt'||kind==='Sailor';
   return <>
     <path d="M69 512c4-83 53-127 134-139h114c83 12 127 56 130 139Z" fill={color}/>
+    {kind==='Red vest' && <><path d="m188 375 65 70 65-70-28 137H218Z" fill="#f2c69d"/><path d="m197 375 41 57-27 80h-85l32-106Zm122 0-42 57 25 80h87l-31-106Z" fill={color}/><path d="M248 432v80" stroke="#78302f" strokeWidth="8"/></>}
+    {kind==='Green robe' && <><path d="m194 374 62 73 65-73-19 138H206Z" fill="#efe9d8"/><path d="M166 400 256 464l-44 48H96Zm182 0-92 64 44 48h112Z" fill={color}/><path d="m186 477 136 23" stroke="#202e29" strokeWidth="21"/></>}
+    {kind==='Black cloak' && <><path d="m165 393 54-26 37 70 37-70 56 26-24 119H187Z" fill="#1c202a"/><path d="M177 398 256 468l79-70" fill="none" stroke="#d2b797" strokeWidth="12"/><path d="M162 404 80 512h82l51-85Z" fill="#333846"/></>}
+    {kind==='Soul robe' && <><path d="m180 385 76 76 74-76-20 127H201Z" fill="#eee4d7"/><path d="m158 394 96 82-43 36H90Zm197 0-99 82 44 36h112Z" fill="#202027"/><path d="m207 458 98 54" stroke="#f4f1e9" strokeWidth="13"/></>}
+    {kind==='Royal coat' && <><path d="m179 377 76 92 77-92 65 135H117Z" fill="#f5efe5"/><path d="m220 378 35 60 38-60 23 134H198Z" fill="#212934"/><path d="M255 448v64m-71-96 28 61m112-61-27 61" stroke="#c9c4bd" strokeWidth="7"/><path d="m254 420 17 22-17 22-17-22Z" fill="#d3d6da"/></>}
+    {kind==='Long coat' && <><path d="m177 376 78 70 78-70-23 136H203Z" fill="#404356"/><path d="m190 389 65 82-31 41H116l51-109Zm132 0-67 82 34 41h107l-47-109Z" fill={color}/><path d="M327 392q23 40 50 62" fill="none" stroke="#e6c36b" strokeWidth="9"/><circle cx="378" cy="454" r="12" fill="#d9b45b"/></>}
+    {kind==='Green jacket' && <><path d="m180 382 75 66 75-66-22 130H204Z" fill="#f5d7a7"/><path d="m166 404 88 68-37 40H91Zm178 0-89 68 39 40h120Z" fill={color}/><path d="M207 399v101m97-101v101" stroke="#b64746" strokeWidth="11"/></>}
+    {kind==='Blue hoodie' && <><path d="M185 382q71-44 144 0l43 130H139Z" fill={color}/><path d="M182 387q73 60 148 0" stroke="#b4d8ec" strokeWidth="18" fill="none"/><path d="m232 444-5 55m56-55 5 55" stroke="#e9ecf2" strokeWidth="7" strokeLinecap="round"/></>}
+    {kind==='Martial tunic' && <><path d="m192 380 63 72 65-72-20 132H210Z" fill="#eef1e7"/><path d="M165 409 256 473l-38 39H96Zm182 0-91 64 39 39h119Z" fill={color}/><path d="M186 498h142" stroke="#5a7da5" strokeWidth="22"/></>}
     {kind==='Jacket' && <><path d="m204 374 45 68-51 70h-58l28-99Z" fill="#28282b"/><path d="m315 374-58 69 49 69h61l-24-101Z" fill="#333438"/><path d="m203 374 55 45 57-45-44 70-13 21-17-26Z" fill="#d9d7d2"/></>}
     {kind==='Turtleneck' && <rect x="199" y="362" width="122" height="85" rx="24" fill={color} stroke="#ffffff" strokeOpacity=".18" strokeWidth="5"/>}
     {light && <><path d="m194 374 63 56 62-56-41 84-21-21-22 21Z" fill="#f9f3e9"/>{kind==='Sailor' && <path d="M188 381 259 448l71-67-11 52-60 46-59-46Z" fill="#354b73"/>}</>}
@@ -80,6 +122,9 @@ function Outfit({kind,color}:{kind:string;color:string}) {
 
 function Accessory({kind}:{kind:string}) {
   if(kind==='None') return null;
+  if(kind==='Straw hat') return <><path d="M119 164c13-89 63-134 139-134 79 0 130 47 140 134Z" fill="#dbaf65"/><path d="M130 151q128 19 256 0" stroke="#a73d39" strokeWidth="28" fill="none"/><ellipse cx="258" cy="175" rx="202" ry="29" fill="#dfb772"/><path d="M91 181q162 42 333 0" stroke="#b68b54" strokeWidth="8" fill="none"/></>;
+  if(kind==='Black headband') return <><path d="M107 180q150-56 303 0l-5 48q-143-43-294 1Z" fill="#25252d"/><path d="M260 180 307 164l42 15-6 39-77 3Z" fill="#b3bcc3"/><path d="m294 185 16 14-16 13-16-13Z" fill="#4e555d"/></>;
+  if(kind==='Star cap') return <><path d="M109 206c-2-108 52-162 149-162 100 0 157 54 149 162Z" fill="#303238"/><path d="M101 210q157-20 316 0-35 45-144 43H159q-38-6-58-43Z" fill="#222329"/><path d="m258 113 10 27 27 1-22 18 8 27-23-16-23 16 8-27-22-18 27-1Z" fill="#d5bd64"/></>;
   if(kind.includes('glasses')||kind.includes('Goggles')||kind.includes('vipers')||kind.includes('sunglasses')) {
     const dark=kind.includes('sunglasses')||kind.includes('vipers');
     return <g stroke={kind==='Goggles'?'#8f9ab0':'#25242b'} strokeWidth="9" fill={dark?'#34363d':'none'} opacity=".9"><rect x="157" y="254" width="78" height="65" rx={kind==='Round glasses'?34:15}/><rect x="280" y="254" width="78" height="65" rx={kind==='Round glasses'?34:15}/><path d="M235 273q22-15 45 0"/></g>;
@@ -93,6 +138,27 @@ function Accessory({kind}:{kind:string}) {
   return <><path d="M116 178c6-87 63-129 143-129 76 0 130 40 137 129Z" fill={kind==='Officer cap'?'#394351':'#62829b'}/><path d="M99 171h319q-9 40-96 42H130q-24-8-31-42Z" fill={kind==='Officer cap'?'#2c3642':'#52718e'}/>{kind==='Trucker hat' && <rect x="206" y="103" width="104" height="48" rx="9" fill="#e9ded0"/>}</>;
 }
 
+function AnimeProps({name}:{name:string}) {
+  if(name==='Roronoa Zoro') return <g><path d="m46 501 116-259m304 259L354 231" stroke="#bfc5c4" strokeWidth="17"/><path d="m98 389 80-159m242 165-75-168" stroke="#343139" strokeWidth="23"/><path d="m63 475 65-130m336 136-61-126" stroke="#c9aa68" strokeWidth="10"/></g>;
+  if(name==='Kurosaki Ichigo') return <g><path d="M409 495 100 64" stroke="#e0e0df" strokeWidth="23"/><path d="m368 438 49-33" stroke="#23232b" strokeWidth="23"/></g>;
+  if(name==='Asta') return <g><path d="M79 514 386 127" stroke="#383a47" strokeWidth="48"/><path d="M75 511 377 134" stroke="#9b9a9d" strokeWidth="14"/></g>;
+  if(name==='Yhwach') return <g opacity=".52"><path d="M74 471Q16 291 131 123m305 349q95-165-12-332" fill="none" stroke="#6b92d2" strokeWidth="18" strokeLinecap="round"/></g>;
+  return null;
+}
+
+function AnimeDetails({name,skin}:{name:string;skin:string}) {
+  if(name==='Monkey D Luffy') return <><path d="m155 326 25 23m-13-28 22 20" stroke="#b36d60" strokeWidth="5" strokeLinecap="round"/><path d="M230 386q23 16 49 0" fill="none" stroke="#a5756e" strokeWidth="5" strokeLinecap="round"/></>;
+  if(name==='Roronoa Zoro') return <><path d="M171 264q24-9 43 0" stroke={skin} strokeWidth="22"/><path d="m160 253 41 97" stroke="#bc7b77" strokeWidth="5"/><path d="M162 283q22-6 44 5" stroke="#332d31" strokeWidth="6" fill="none"/><circle cx="131" cy="286" r="8" fill="#e1bc77"/><circle cx="132" cy="308" r="8" fill="#e1bc77"/></>;
+  if(name==='Asta') return <><path d="M166 246q23-15 47-4m88 0q22-11 43 4" stroke="#343238" strokeWidth="10" fill="none" strokeLinecap="round"/><path d="m232 228 18 20 23-20" stroke="#a9776a" strokeWidth="5" fill="none"/></>;
+  if(name==='Kurosaki Ichigo') return <><path d="m165 258 43-14m95 0 43 14" stroke="#3e2926" strokeWidth="10" strokeLinecap="round"/><path d="M235 383q20 7 42-2" stroke="#b1796b" strokeWidth="5" fill="none"/></>;
+  if(name==='Yhwach') return <><path d="m151 253 56 6m98 0 57-6" stroke="#1e1d22" strokeWidth="15" strokeLinecap="round"/><path d="M256 369q-27 18-57-1 18 31 57 18 40 13 57-18-30 19-57 1Z" fill="#24242b"/></>;
+  if(name==='Kujo Jotaro') return <><path d="m164 251 45-19m98 0 45 19" stroke="#232329" strokeWidth="14" strokeLinecap="round"/><path d="M242 389h32" stroke="#785d58" strokeWidth="6" strokeLinecap="round"/></>;
+  if(name==='Gon') return <><path d="M179 255q17-14 37-8m84 0q19-6 37 8" stroke="#1d2928" strokeWidth="9" fill="none" strokeLinecap="round"/><path d="M234 381q22 18 47 0" stroke="#ad7067" strokeWidth="6" fill="none" strokeLinecap="round"/></>;
+  if(name==='Kilua') return <><path d="m165 261 41-6m102 0 40 6" stroke="#aab4c8" strokeWidth="8" strokeLinecap="round"/><path d="M241 388q17 8 34 0" stroke="#ac8580" strokeWidth="5" fill="none"/></>;
+  if(name==='Netero') return <><path d="M167 281q27 20 53 0m77 0q28 20 52 0" stroke={skin} strokeWidth="32" fill="none"/><path d="M165 274q25-21 57 0m72 0q32-21 57 0" stroke="#ede8df" strokeWidth="18" fill="none" strokeLinecap="round"/><path d="M174 304q22 11 45 0m79 0q24 11 48 0" stroke="#564b49" strokeWidth="6" fill="none"/><path d="M183 369q72 37 147 0-9 87-73 104-64-20-74-104Z" fill="#e2e2e0"/><path d="M225 420q30 20 64 0" stroke="#b5b6b6" strokeWidth="7" fill="none"/></>;
+  return null;
+}
+
 function Art({avatar}:{avatar:AvatarState}) {
   const skin=lookup(skins,avatar.skin,'#fae2cd');
   const blush=avatar.blush==='Match skin' ? '#eebba5' : lookup(blushes,avatar.blush,'#eebba5');
@@ -100,6 +166,7 @@ function Art({avatar}:{avatar:AvatarState}) {
   const outfit=lookup(outfitColors,avatar.outfitColor,'#505154');
   const size=avatar.size==='Small'?.88:avatar.size==='Large'?1.12:1;
   return <g transform={`translate(${256-256*size} ${256-256*size}) scale(${size})`}>
+    <AnimeProps name={avatar.anime}/>
     <Outfit kind={avatar.outfit} color={outfit}/>
     <HairBack style={avatar.hair} color={hair}/>
     <HeadShape kind={avatar.character==='Bot'?avatar.head:avatar.character} skin={skin}/>
@@ -109,7 +176,8 @@ function Art({avatar}:{avatar:AvatarState}) {
     <ellipse cx="153" cy="346" rx="23" ry="12" fill={blush} opacity=".76" transform="rotate(17 153 346)"/>
     <ellipse cx="362" cy="354" rx="23" ry="12" fill={blush} opacity=".76" transform="rotate(17 362 354)"/>
     {avatar.facialHair==='Curly mustache' && <path d="M258 373q-27 22-47 0 8 35 47 12 39 23 47-12-20 22-47 0Z" fill={hair}/>}
-    {avatar.facialHair==='Full beard' && <path d="M152 348q7 85 106 105 103-20 108-105-25 54-63 36-43 33-89 0-37 18-62-36Z" fill={hair} opacity=".92"/>}
+    {avatar.facialHair==='Full beard' && avatar.anime!=='Netero' && <path d="M152 348q7 85 106 105 103-20 108-105-25 54-63 36-43 33-89 0-37 18-62-36Z" fill={hair} opacity=".92"/>}
+    <AnimeDetails name={avatar.anime} skin={skin}/>
     <Accessory kind={avatar.accessory}/>
     {avatar.held==='Sweet potato' && <g transform="translate(385 409) rotate(-24)"><ellipse cx="0" cy="0" rx="31" ry="50" fill="#a66c69"/><path d="M0-52q-3-24 12-30" stroke="#65875b" strokeWidth="9" fill="none"/></g>}
     {avatar.special && <text x="408" y="112" fontSize="43">✨</text>}

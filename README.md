@@ -15,6 +15,7 @@ For a production build, run `npm run build`. Vercel can deploy this Vite project
 
 - Head, character, skin, blush, hair, outfit, accessory, backdrop, and frame controls
 - Live SVG preview with ten preset looks
+- Like menu with nine anime-inspired character PFPs; Luffy is the starting look, and the classic bot remains selectable
 - Randomize, undo, and redo
 - Nine-frame photobooth sheet
 - Shareable URL containing the current choices
@@ -31,3 +32,5 @@ For a production build, run `npm run build`. Vercel can deploy this Vite project
 | Colors, spacing, responsive layout | `src/styles.css` |
 
 All editing happens in the browser. There is no account, database, or server-side image processing. A shared link stores the choices in its URL, so changing option names later may change how older links render. If you add a setting, add it to `AvatarState` and `initialAvatar` in `src/data.ts`, then render its control and illustration.
+
+The anime PFPs are original fan-art interpretations made from editable SVG shapes. They do not bundle official character images or logos.

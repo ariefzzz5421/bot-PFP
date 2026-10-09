@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import { Camera, Check, Copy, Download, Dices, Grid2X2, Heart, Link as LinkIcon, MessageSquare, Redo2, Undo2, X } from 'lucide-react';
 import { Avatar, Photobooth } from './Avatar';
-import { accessories, backdrops, blushes, frames, hairNames, hairs, initialAvatar, looks, outfits, outfitColors, randomAvatar, skins, type AvatarState } from './data';
+import { accessories, animePresets, backdrops, blushes, classicAvatar, frames, hairNames, hairs, initialAvatar, looks, outfits, outfitColors, randomAvatar, skins, type AvatarState } from './data';
 
 type Tab = 'Head'|'Hair'|'Outfit'|'Extras'|'Backdrop'|'Frame';
 const tabs: Tab[]=['Head','Hair','Outfit','Extras','Backdrop','Frame'];
@@ -14,6 +14,7 @@ function readSharedAvatar(): AvatarState {
     const parsed=JSON.parse(atob(raw.replace(/-/g,'+').replace(/_/g,'/'))) as Record<string,unknown>;
     const next={...initialAvatar};
     for(const key of validKeys) if(typeof parsed[key]===typeof initialAvatar[key]) (next as unknown as Record<string,unknown>)[key]=parsed[key];
+    if(!Object.prototype.hasOwnProperty.call(parsed,'anime')) next.anime='';
     return next;
   } catch { return initialAvatar; }
 }
@@ -30,14 +31,25 @@ function App() {
   const [tab,setTab]=useState<Tab>('Head');
   const [photobooth,setPhotobooth]=useState(false);
   const [looksOpen,setLooksOpen]=useState(false);
+  const [animeOpen,setAnimeOpen]=useState(false);
   const [toast,setToast]=useState('');
   const svgWrap=useRef<HTMLDivElement>(null);
+  const animeMenu=useRef<HTMLDivElement>(null);
 
   useEffect(()=>{
     if(!toast) return;
     const timer=window.setTimeout(()=>setToast(''),3200);
     return ()=>window.clearTimeout(timer);
   },[toast]);
+
+  useEffect(()=>{
+    if(!animeOpen) return;
+    const onOutside=(event:PointerEvent)=>{if(!animeMenu.current?.contains(event.target as Node)) setAnimeOpen(false)};
+    const onEscape=(event:KeyboardEvent)=>{if(event.key==='Escape') setAnimeOpen(false)};
+    document.addEventListener('pointerdown',onOutside);
+    document.addEventListener('keydown',onEscape);
+    return ()=>{document.removeEventListener('pointerdown',onOutside);document.removeEventListener('keydown',onEscape)};
+  },[animeOpen]);
 
   function change(patch:Partial<AvatarState>) {
     const next={...avatar,...patch};
@@ -97,7 +109,7 @@ function App() {
 
   function optionGrid(title:string,key:keyof AvatarState,values:readonly string[],className='') {
     return <section className="option-section"><h2>{title}</h2><div className={`option-grid ${className}`} role="radiogroup" aria-label={title}>
-      {values.map(value=><button key={value} className={`option-card ${avatar[key]===value?'is-selected':''}`} role="radio" aria-checked={avatar[key]===value} onClick={()=>change({[key]:value})} title={value}>
+      {values.map(value=><button key={value} className={`option-card ${avatar[key]===value?'is-selected':''}`} role="radio" aria-checked={avatar[key]===value} onClick={()=>change({[key]:value,...(key==='character'&&value!=='Bot'?{anime:''}:{})})} title={value}>
         <span className="thumb" aria-hidden="true"><Avatar avatar={{...avatar,[key]:value}} width={96} height={96}/></span><span className="option-label">{value}</span>
       </button>)}
     </div></section>;
@@ -115,13 +127,19 @@ function App() {
   return <div className="app-shell">
     <header className="topbar">
       <a className="brand" href="/" aria-label="bot pfp home"><span className="brand-icon"><Avatar avatar={initialAvatar} width={36} height={36}/></span><strong>bot <span>pfp</span></strong></a>
-      <div className="top-actions"><a className="feedback" href="https://github.com/ariefzzz5421/bot-PFP/issues/new" target="_blank" rel="noopener noreferrer"><MessageSquare size={16}/> <span>Feedback</span></a><button className="pill-button" onClick={copyLink}><LinkIcon size={17}/> Copy link</button></div>
+      <div className="top-actions">
+        <div className="anime-menu" ref={animeMenu}>
+          <button className={`anime-trigger ${animeOpen?'active':''}`} aria-label="Like: anime PFP characters" aria-expanded={animeOpen} aria-controls="anime-presets" onClick={()=>setAnimeOpen(open=>!open)}><Heart size={17} fill={avatar.anime?'currentColor':'none'}/><span>Like</span></button>
+          {animeOpen && <div className="anime-popover" id="anime-presets"><div className="anime-popover-head"><div><span className="anime-eyebrow">FAN ART COLLECTION</span><h2>Anime PFPs</h2><p>Pick a character, then make it yours.</p></div><button aria-label="Close anime presets" onClick={()=>setAnimeOpen(false)}><X size={18}/></button></div><div className="anime-grid">{animePresets.map(preset=><button key={preset.name} className={`anime-card ${avatar.anime===preset.name?'selected':''}`} aria-pressed={avatar.anime===preset.name} title={`${preset.name} · ${preset.subtitle}`} onClick={()=>{change({...initialAvatar,...preset.changes});setAnimeOpen(false);setPhotobooth(false)}}><span className="anime-avatar" aria-hidden="true"><Avatar avatar={{...initialAvatar,...preset.changes}} width={112} height={112}/></span><span className="anime-name">{preset.name}</span><span className="anime-series">{preset.series}</span></button>)}</div><button className="classic-return" onClick={()=>{change(classicAvatar);setAnimeOpen(false);setPhotobooth(false)}}>Use classic bot look</button></div>}
+        </div>
+        <a className="feedback" href="https://github.com/ariefzzz5421/bot-PFP/issues/new" target="_blank" rel="noopener noreferrer"><MessageSquare size={16}/> <span>Feedback</span></a><button className="pill-button" onClick={copyLink}><LinkIcon size={17}/> Copy link</button>
+      </div>
     </header>
 
     <main className="workspace">
       <section className="preview-panel" aria-label="Avatar preview">
         <div className="preview-top"><button className={`pill-button ${photobooth?'active':''}`} aria-pressed={photobooth} onClick={()=>setPhotobooth(!photobooth)}><Camera size={17}/> Photobooth</button><button className={`pill-button ${looksOpen?'active':''}`} aria-expanded={looksOpen} onClick={()=>setLooksOpen(!looksOpen)}><Grid2X2 size={17}/> Looks</button></div>
-        {looksOpen && <div className="looks-popover"><div className="looks-title"><strong>Looks</strong><button aria-label="Close looks" onClick={()=>setLooksOpen(false)}><X size={17}/></button></div><div className="looks-grid">{looks.map(look=><button key={look.name} onClick={()=>{change(look.changes);setLooksOpen(false)}}><span className="look-thumb" aria-hidden="true"><Avatar avatar={{...avatar,...look.changes}} width={56} height={56}/></span><span>{look.name}</span></button>)}</div></div>}
+        {looksOpen && <div className="looks-popover"><div className="looks-title"><strong>Looks</strong><button aria-label="Close looks" onClick={()=>setLooksOpen(false)}><X size={17}/></button></div><div className="looks-grid">{looks.map(look=><button key={look.name} onClick={()=>{change({...classicAvatar,...look.changes});setLooksOpen(false)}}><span className="look-thumb" aria-hidden="true"><Avatar avatar={{...classicAvatar,...look.changes}} width={56} height={56}/></span><span>{look.name}</span></button>)}</div></div>}
         <div className={`preview-center ${photobooth?'sheet':''}`} ref={svgWrap}>{photobooth?<Photobooth avatar={avatar}/>:<Avatar avatar={avatar}/>}</div>
         <div className="preview-controls"><button aria-label="Undo" title="Undo" disabled={!history.length} onClick={undo}><Undo2 size={20}/></button><button className="randomize" onClick={()=>change(randomAvatar())}><Dices size={17}/> Randomize</button><button aria-label="Redo" title="Redo" disabled={!future.length} onClick={redo}><Redo2 size={20}/></button></div>
       </section>

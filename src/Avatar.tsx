@@ -1,9 +1,11 @@
 import type { AvatarState } from './data';
-import { lookup, skins, blushes, hairs, outfitColors } from './data';
+import { animePresets, lookup, skins, blushes, hairs, outfitColors } from './data';
+import { AnimeCostume, AnimeFace, AnimeHeadwear, AnimeMarks } from './AnimeArt';
 
 type Props = { avatar: AvatarState; frame?: string; x?: number; y?: number; width?: number; height?: number };
 
 const bgColors: Record<string,string> = { Ink:'#1d1c1d',Graphite:'#2c2b30',Charcoal:'#393a3c',Cream:'#f5e8da',Sky:'#b8d6ec',Mint:'#bdded0',Sun:'#f6cf78',Coral:'#e9a696',Lavender:'#c9bce2',Navy:'#344b69',Split:'#d6b7a9',Glow:'#324053',Halftone:'#eacaa9',Stripes:'#ddc4b6',Rays:'#e7b99c' };
+const signatureOutfits = new Map(animePresets.map(preset=>[preset.name,preset.changes.outfit]));
 
 function Background({name}:{name:string}) {
   const fill=bgColors[name];
@@ -30,12 +32,13 @@ function HeadShape({kind,skin}:{kind:string;skin:string}) {
 
 function HairBack({style,color}:{style:string;color:string}) {
   if(style==='Buzz cut' || style==='Slick back' || style==='Sage topknot') return null;
-  const long=/Long|Ponytail|Twin tails|Big waves|Layered bob|Shaggy|Curly|Emperor waves/.test(style);
+  const long=/Long|Ponytail|Twin tails|Big waves|Layered bob|Shaggy|Curly|Emperor waves|Butterfly waves|Braided|Boar mane/.test(style);
   return <>
     <path d={long ? 'M100 245C73 98 184 55 279 64c111 4 168 90 148 221l36 198c-57 40-103 10-106-37l-2-114H154l-5 126c-37 42-78 24-76-25Z' : 'M100 255C75 140 141 65 262 62c130-6 186 82 166 204l-27 86-52-29H153l-43 42Z'} fill={color}/>
     {style==='Ponytail' && <path d="M398 155c75 33 99 112 61 185-16 31-45 53-70 49 43-85-16-139-27-177Z" fill={color}/>}
     {style==='Twin tails' && <><path d="M117 211c-94 44-98 165-34 217 2-89 50-109 82-154ZM401 210c95 43 101 166 34 218-2-89-51-108-83-153Z" fill={color}/></>}
     {style==='Messy bun' && <circle cx="382" cy="105" r="64" fill={color}/>}
+    {style==='Braided' && <><path d="M116 245q-65 52-45 205l54-20q-13-96 29-142Zm283 0q66 55 44 205l-54-20q13-96-29-142Z" fill={color}/>{[0,1,2,3].map(i=><g key={i} fill={color}><ellipse cx={89+i*2} cy={305+i*39} rx="30" ry="22" transform={`rotate(${i%2?25:-25} ${89+i*2} ${305+i*39})`}/><ellipse cx={423-i*2} cy={305+i*39} rx="30" ry="22" transform={`rotate(${i%2?-25:25} ${423-i*2} ${305+i*39})`}/></g>)}</>}
   </>;
 }
 
@@ -74,6 +77,14 @@ function HairFront({style,color}:{style:string;color:string}) {
     <path d="M118 182q23-27 56-23m41-44q28-17 56-3m47 32q24-8 46 6" stroke="#fff" strokeWidth="10" opacity=".28" strokeLinecap="round" fill="none"/>
   </>;
   if(style==='Sage topknot') return <><path d="M232 113q-23-45-14-80 10-31 39-32 27 2 39 32 6 34-16 80Z" fill={color}/><path d="M213 89q43 19 86 0" stroke="#eee" strokeWidth="14" fill="none"/><path d="M192 129q65-17 130 0" stroke={color} strokeWidth="15" opacity=".6" fill="none"/></>;
+  if(style==='Flame layers') return <><path d="M88 256 63 170 111 190 113 94 160 131 189 34 226 109 275 22 306 105 365 50 360 140 425 95 401 182 446 214 410 267q-37-39-79-44-42 26-76 11-43 30-73 6-44 35-94 16Z" fill={color}/><path d="M91 222 87 146l38 41 21-73 33 47 37-76 40 68 51-86 26 83 62-60-14 93 41-25-15 83q-33-31-66-35-29 22-62 13-28 21-63 7-30 24-66 5-29 20-59 9Z" fill="#eb613c"/><path d="m114 196 34-52 14 46m71-59 32-62 22 81m51-7 39-42-9 77" fill="none" stroke="#f9d466" strokeWidth="17" strokeLinecap="round"/></>;
+  if(style==='Flat top') return <><path d="M102 227 102 85q0-30 30-30h247q31 0 31 31v141l-34-17H135Z" fill={color}/><path d="M118 87h276" stroke="#fff" strokeOpacity=".22" strokeWidth="10"/><path d="M104 210q82-28 160-20 81-11 146 20" fill="none" stroke={color} strokeWidth="22"/></>;
+  if(style==='Pompadour') return <><path d="M101 254Q64 138 128 80q27-29 77-31 12-50 74-43 106 10 126 108 14 73-3 142-48-30-89-26-45 12-87 0-62 24-125 24Z" fill={color}/><path d="M127 159q-12-58 37-85 40-23 94 6 55-28 103 9 20 20 24 57-43-18-90-3-46-21-94-1-43-10-74 17Z" fill="#fff" opacity=".1"/><path d="M143 157q64-69 124-27 72-41 107 30" fill="none" stroke={color} strokeWidth="26" strokeLinecap="round"/></>;
+  if(style==='Tower') return <><path d="M139 247 158-37h194l20 284q-104-40-233 0Z" fill={color}/><path d="M177-8h157" stroke="#fff" strokeOpacity=".25" strokeWidth="10"/><path d="m174 58-11 104m180-104 11 104" stroke="#77777e" strokeOpacity=".4" strokeWidth="7"/></>;
+  if(style==='Bubble curls') return <><path d="M97 255Q62 83 256 68q178-8 159 187-31-32-61-20-52 27-93 9-48 22-90-5-34 10-74 16Z" fill={color}/>{[178,256,334].map((x,i)=><g key={x}><circle cx={x} cy={i===1?127:139} r="43" fill={color}/><path d={`M${x-22} ${i===1?128:140}q22-25 44 0-18 25-44 0Z`} fill="#b58a33" opacity=".45"/></g>)}</>;
+  if(style==='Butterfly waves') return <><path d="M95 250Q80 79 254 66q170 0 161 184-38-27-60-24-45 28-97 15-55 30-94 3-34 20-69 6Z" fill={color}/><path d="M145 132q75 87 220 1-20 80-76 100-77 24-144-101Z" fill={color}/><path d="M124 188q-34 50-24 112m288-114q34 50 24 112" stroke={color} strokeWidth="38" strokeLinecap="round"/></>;
+  if(style==='Boar mane') return <><path d="M80 259 67 183 107 194 96 106 151 139 176 57 220 123 252 44 296 114 354 58 361 140 416 106 403 190 447 211 405 263Z" fill={color}/><path d="M80 246q79-51 178-36 89-17 156 38l-19 52q-66-36-139-27-81-9-157 30Z" fill={color}/></>;
+  if(style==='Braided') return <><path d="M101 235q-16-97 50-146 48-35 109-32 117 2 150 93l-12 93q-35-20-56-17-34 25-78 10-39 25-79 4-39 17-84-5Z" fill={color}/><path d="M148 124q39 33 107 31 66 0 107-32" fill="none" stroke="#fff" strokeOpacity=".13" strokeWidth="11"/></>;
   if(style==='Wavy') return <>
     <path d="M94 260c-28-79 1-150 67-185 47-26 89-22 128-18 65-8 115 31 132 91 15 49 4 100-24 137-12-29-26-45-45-51-11 20-34 34-60 39-26 6-48 3-69-9-22 29-59 43-94 37-19-3-29-18-35-41Z" fill={color}/>
     <path d="M100 225c11-59 48-99 104-119-27 27-24 35-18 42 31-24 68-37 98-31-39 16-55 38-55 58 32-10 68-25 92-49-7 33-22 58-51 72-39 20-57 9-71 14-24 20-59 26-99 13Z" fill="#201919" opacity=".17"/>
@@ -143,19 +154,12 @@ function AnimeProps({name}:{name:string}) {
   if(name==='Kurosaki Ichigo') return <g><path d="M409 495 100 64" stroke="#e0e0df" strokeWidth="23"/><path d="m368 438 49-33" stroke="#23232b" strokeWidth="23"/></g>;
   if(name==='Asta') return <g><path d="M79 514 386 127" stroke="#383a47" strokeWidth="48"/><path d="M75 511 377 134" stroke="#9b9a9d" strokeWidth="14"/></g>;
   if(name==='Yhwach') return <g opacity=".52"><path d="M74 471Q16 291 131 123m305 349q95-165-12-332" fill="none" stroke="#6b92d2" strokeWidth="18" strokeLinecap="round"/></g>;
-  return null;
-}
-
-function AnimeDetails({name,skin}:{name:string;skin:string}) {
-  if(name==='Monkey D Luffy') return <><path d="m155 326 25 23m-13-28 22 20" stroke="#b36d60" strokeWidth="5" strokeLinecap="round"/><path d="M230 386q23 16 49 0" fill="none" stroke="#a5756e" strokeWidth="5" strokeLinecap="round"/></>;
-  if(name==='Roronoa Zoro') return <><path d="M171 264q24-9 43 0" stroke={skin} strokeWidth="22"/><path d="m160 253 41 97" stroke="#bc7b77" strokeWidth="5"/><path d="M162 283q22-6 44 5" stroke="#332d31" strokeWidth="6" fill="none"/><circle cx="131" cy="286" r="8" fill="#e1bc77"/><circle cx="132" cy="308" r="8" fill="#e1bc77"/></>;
-  if(name==='Asta') return <><path d="M166 246q23-15 47-4m88 0q22-11 43 4" stroke="#343238" strokeWidth="10" fill="none" strokeLinecap="round"/><path d="m232 228 18 20 23-20" stroke="#a9776a" strokeWidth="5" fill="none"/></>;
-  if(name==='Kurosaki Ichigo') return <><path d="m165 258 43-14m95 0 43 14" stroke="#3e2926" strokeWidth="10" strokeLinecap="round"/><path d="M235 383q20 7 42-2" stroke="#b1796b" strokeWidth="5" fill="none"/></>;
-  if(name==='Yhwach') return <><path d="m151 253 56 6m98 0 57-6" stroke="#1e1d22" strokeWidth="15" strokeLinecap="round"/><path d="M256 369q-27 18-57-1 18 31 57 18 40 13 57-18-30 19-57 1Z" fill="#24242b"/></>;
-  if(name==='Kujo Jotaro') return <><path d="m164 251 45-19m98 0 45 19" stroke="#232329" strokeWidth="14" strokeLinecap="round"/><path d="M242 389h32" stroke="#785d58" strokeWidth="6" strokeLinecap="round"/></>;
-  if(name==='Gon') return <><path d="M179 255q17-14 37-8m84 0q19-6 37 8" stroke="#1d2928" strokeWidth="9" fill="none" strokeLinecap="round"/><path d="M234 381q22 18 47 0" stroke="#ad7067" strokeWidth="6" fill="none" strokeLinecap="round"/></>;
-  if(name==='Kilua') return <><path d="m165 261 41-6m102 0 40 6" stroke="#aab4c8" strokeWidth="8" strokeLinecap="round"/><path d="M241 388q17 8 34 0" stroke="#ac8580" strokeWidth="5" fill="none"/></>;
-  if(name==='Netero') return <><path d="M167 281q27 20 53 0m77 0q28 20 52 0" stroke={skin} strokeWidth="32" fill="none"/><path d="M165 274q25-21 57 0m72 0q32-21 57 0" stroke="#ede8df" strokeWidth="18" fill="none" strokeLinecap="round"/><path d="M174 304q22 11 45 0m79 0q24 11 48 0" stroke="#564b49" strokeWidth="6" fill="none"/><path d="M183 369q72 37 147 0-9 87-73 104-64-20-74-104Z" fill="#e2e2e0"/><path d="M225 420q30 20 64 0" stroke="#b5b6b6" strokeWidth="7" fill="none"/></>;
+  if(name==='Tanjiro Kamado'||name==='Giyu Tomioka') return <g><path d="M88 514 426 52" stroke="#dbe7eb" strokeWidth="16"/><path d="m82 509 66-89" stroke="#252d34" strokeWidth="23"/><path d="M53 470q50-21 94-62m240-286q50 30 70 83" fill="none" stroke="#80c4cf" strokeWidth="17" opacity=".67"/></g>;
+  if(name==='Zenitsu Agatsuma') return <g><path d="M85 505 425 69" stroke="#eae7e1" strokeWidth="13"/><path d="m82 500 81-101" stroke="#edbc4b" strokeWidth="22"/><path d="m402 94-34 80 29-11-39 84" fill="none" stroke="#f9dc66" strokeWidth="13"/></g>;
+  if(name==='Kurapika') return <g fill="none" stroke="#d3ba58" strokeWidth="11"><path d="M60 473q-39-106 58-183m336 179q41-105-62-183"/><circle cx="66" cy="465" r="22" fill="#ece5c6"/></g>;
+  if(name==='Killua Zoldyck'||name==='Kilua') return <g fill="none" stroke="#ecfaff" strokeWidth="14" opacity=".9"><path d="m70 129 48 50-38 20 46 51m296-97-48 50 38 20-46 51"/></g>;
+  if(name==='Hisoka Morow') return <g><path d="m51 172 58-46 58 46-58 46Z" fill="#f1ece8" stroke="#c7798c" strokeWidth="8"/><path d="m399 172 58-46 58 46-58 46Z" fill="#f1ece8" stroke="#6885bb" strokeWidth="8"/></g>;
+  if(name==='Kujo Jotaro'||name==='DIO') return <g fill="none" stroke="#d3c179" strokeWidth="10" opacity=".65"><path d="m66 92 27 34 35-19m268 19 36-33 20 42"/><path d="M54 423q-48-79 18-147m372 149q52-79-14-147"/></g>;
   return null;
 }
 
@@ -168,17 +172,18 @@ function Art({avatar}:{avatar:AvatarState}) {
   return <g transform={`translate(${256-256*size} ${256-256*size}) scale(${size})`}>
     <AnimeProps name={avatar.anime}/>
     <Outfit kind={avatar.outfit} color={outfit}/>
+    <AnimeCostume name={avatar.outfit===signatureOutfits.get(avatar.anime)?avatar.anime:''}/>
     <HairBack style={avatar.hair} color={hair}/>
     <HeadShape kind={avatar.character==='Bot'?avatar.head:avatar.character} skin={skin}/>
     {avatar.character==='Muni' && <path d="M114 215c14-84 75-126 143-127 73 0 132 47 146 126-28-22-49-30-74-31-38-2-80 17-121 17-40 0-61-2-94 15Z" fill="#958cc7"/>}
     {avatar.character==='Bot' && <HairFront style={avatar.hair} color={hair}/>}
-    <g fill="#242225"><rect x="185" y="274" width="21" height="71" rx="11" transform="rotate(16 195 309)"/><rect x="307" y="274" width="21" height="71" rx="11" transform="rotate(16 317 309)"/></g>
-    <ellipse cx="153" cy="346" rx="23" ry="12" fill={blush} opacity=".76" transform="rotate(17 153 346)"/>
-    <ellipse cx="362" cy="354" rx="23" ry="12" fill={blush} opacity=".76" transform="rotate(17 362 354)"/>
+    {avatar.anime?<AnimeFace name={avatar.anime} skin={skin}/>:<g fill="#242225"><rect x="185" y="274" width="21" height="71" rx="11" transform="rotate(16 195 309)"/><rect x="307" y="274" width="21" height="71" rx="11" transform="rotate(16 317 309)"/></g>}
+    {avatar.anime!=='Brook'&&avatar.anime!=='Inosuke Hashibira'&&<><ellipse cx="153" cy="346" rx="23" ry="12" fill={blush} opacity=".57" transform="rotate(17 153 346)"/><ellipse cx="362" cy="354" rx="23" ry="12" fill={blush} opacity=".57" transform="rotate(17 362 354)"/></>}
     {avatar.facialHair==='Curly mustache' && <path d="M258 373q-27 22-47 0 8 35 47 12 39 23 47-12-20 22-47 0Z" fill={hair}/>}
     {avatar.facialHair==='Full beard' && avatar.anime!=='Netero' && <path d="M152 348q7 85 106 105 103-20 108-105-25 54-63 36-43 33-89 0-37 18-62-36Z" fill={hair} opacity=".92"/>}
-    <AnimeDetails name={avatar.anime} skin={skin}/>
+    <AnimeMarks name={avatar.anime}/>
     <Accessory kind={avatar.accessory}/>
+    {avatar.accessory==='None' && <AnimeHeadwear name={avatar.anime}/>}
     {avatar.held==='Sweet potato' && <g transform="translate(385 409) rotate(-24)"><ellipse cx="0" cy="0" rx="31" ry="50" fill="#a66c69"/><path d="M0-52q-3-24 12-30" stroke="#65875b" strokeWidth="9" fill="none"/></g>}
     {avatar.special && <text x="408" y="112" fontSize="43">✨</text>}
   </g>;
@@ -189,7 +194,7 @@ const frameTransforms:Record<string,string>={
 };
 
 export function Avatar({avatar,frame,x,y,width,height}:Props) {
-  return <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width={width??512} height={height??512} x={x} y={y} aria-label={`${avatar.character} avatar preview`} role="img">
+  return <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width={width??512} height={height??512} x={x} y={y} aria-label={`${avatar.anime||avatar.character} avatar preview`} role="img">
     <Background name={avatar.backdrop}/>
     <g transform={frameTransforms[frame||avatar.frame]||frameTransforms['Corner peek']}><Art avatar={avatar}/></g>
   </svg>;

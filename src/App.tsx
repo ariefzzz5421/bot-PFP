@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
-import { Camera, Check, Copy, Download, Dices, Grid2X2, Heart, Link as LinkIcon, MessageSquare, Redo2, Undo2, X } from 'lucide-react';
+import { Camera, Check, Copy, Download, Dices, Grid2X2, Heart, Link as LinkIcon, MessageSquare, Redo2, Search, Sparkles, Undo2, X } from 'lucide-react';
 import { Avatar, Photobooth } from './Avatar';
-import { accessories, animePresets, backdrops, blushes, classicAvatar, frames, hairNames, hairs, initialAvatar, looks, outfits, outfitColors, randomAvatar, skins, type AvatarState } from './data';
+import { accessories, animeCollections, animePresets, backdrops, blushes, classicAvatar, frames, hairNames, hairs, initialAvatar, looks, outfits, outfitColors, randomAvatar, skins, type AvatarState } from './data';
 
 type Tab = 'Head'|'Hair'|'Outfit'|'Extras'|'Backdrop'|'Frame';
 const tabs: Tab[]=['Head','Hair','Outfit','Extras','Backdrop','Frame'];
@@ -15,6 +15,8 @@ function readSharedAvatar(): AvatarState {
     const next={...initialAvatar};
     for(const key of validKeys) if(typeof parsed[key]===typeof initialAvatar[key]) (next as unknown as Record<string,unknown>)[key]=parsed[key];
     if(!Object.prototype.hasOwnProperty.call(parsed,'anime')) next.anime='';
+    if(next.anime==='Gon') next.anime='Gon Freecss';
+    if(next.anime==='Kilua') next.anime='Killua Zoldyck';
     return next;
   } catch { return initialAvatar; }
 }
@@ -32,6 +34,8 @@ function App() {
   const [photobooth,setPhotobooth]=useState(false);
   const [looksOpen,setLooksOpen]=useState(false);
   const [animeOpen,setAnimeOpen]=useState(false);
+  const [animeCollection,setAnimeCollection]=useState<string>('ONE PIECE');
+  const [animeQuery,setAnimeQuery]=useState('');
   const [toast,setToast]=useState('');
   const svgWrap=useRef<HTMLDivElement>(null);
   const animeMenu=useRef<HTMLDivElement>(null);
@@ -124,13 +128,25 @@ function App() {
     return <section className="option-section"><h2>{title}</h2><div className="segmented" role="radiogroup" aria-label={title}>{values.map(value=><button key={value} role="radio" aria-checked={avatar[key]===value} className={avatar[key]===value?'active':''} onClick={()=>change({[key]:value})}>{value}</button>)}</div></section>;
   }
 
+  const visibleAnime=animePresets.filter(preset=>
+    (animeQuery.trim() || animeCollection==='ALL' || preset.series===animeCollection) &&
+    `${preset.name} ${preset.subtitle} ${preset.series}`.toLowerCase().includes(animeQuery.trim().toLowerCase())
+  );
+
   return <div className="app-shell">
     <header className="topbar">
       <a className="brand" href="/" aria-label="bot pfp home"><span className="brand-icon"><Avatar avatar={initialAvatar} width={36} height={36}/></span><strong>bot <span>pfp</span></strong></a>
       <div className="top-actions">
         <div className="anime-menu" ref={animeMenu}>
-          <button className={`anime-trigger ${animeOpen?'active':''}`} aria-label="Like: anime PFP characters" aria-expanded={animeOpen} aria-controls="anime-presets" onClick={()=>setAnimeOpen(open=>!open)}><Heart size={17} fill={avatar.anime?'currentColor':'none'}/><span>Like</span></button>
-          {animeOpen && <div className="anime-popover" id="anime-presets"><div className="anime-popover-head"><div><span className="anime-eyebrow">FAN ART COLLECTION</span><h2>Anime PFPs</h2><p>Pick a character, then make it yours.</p></div><button aria-label="Close anime presets" onClick={()=>setAnimeOpen(false)}><X size={18}/></button></div><div className="anime-grid">{animePresets.map(preset=><button key={preset.name} className={`anime-card ${avatar.anime===preset.name?'selected':''}`} aria-pressed={avatar.anime===preset.name} title={`${preset.name} · ${preset.subtitle}`} onClick={()=>{change({...initialAvatar,...preset.changes});setAnimeOpen(false);setPhotobooth(false)}}><span className="anime-avatar" aria-hidden="true"><Avatar avatar={{...initialAvatar,...preset.changes}} width={112} height={112}/></span><span className="anime-name">{preset.name}</span><span className="anime-series">{preset.series}</span></button>)}</div><button className="classic-return" onClick={()=>{change(classicAvatar);setAnimeOpen(false);setPhotobooth(false)}}>Use classic bot look</button></div>}
+          <button className={`anime-trigger ${animeOpen?'active':''}`} aria-label="Anime character collections" aria-expanded={animeOpen} aria-controls="anime-presets" onClick={()=>{setAnimeCollection(animePresets.find(preset=>preset.name===avatar.anime)?.series || 'ONE PIECE');setAnimeQuery('');setAnimeOpen(open=>!open)}}><Sparkles size={17}/><span>Anime</span></button>
+          {animeOpen && <div className="anime-popover" id="anime-presets" role="dialog" aria-label="Anime PFP collections">
+            <div className="anime-popover-head"><div><span className="anime-eyebrow">EDITABLE FAN-ART PORTRAITS</span><h2>Anime collections</h2><p>Choose a character. Customize and download your PFP.</p></div><button aria-label="Close anime collections" onClick={()=>setAnimeOpen(false)}><X size={18}/></button></div>
+            <div className="anime-collection-list" aria-label="Anime series">{['ALL',...animeCollections].map(series=><button key={series} className={animeCollection===series?'active':''} aria-pressed={animeCollection===series} onClick={()=>{setAnimeCollection(series);setAnimeQuery('')}}><span>{series==='ALL'?'All series':series==='BONUS'?'Bonus · Black Clover':series}</span><span>{series==='ALL'?animePresets.length:animePresets.filter(preset=>preset.series===series).length}</span></button>)}</div>
+            <label className="anime-search"><Search size={16}/><input type="search" value={animeQuery} onChange={event=>setAnimeQuery(event.target.value)} placeholder="Search characters or series" aria-label="Search anime characters"/></label>
+            <div className="anime-results"><strong>{animeQuery?`Search results · ${visibleAnime.length}`:animeCollection==='ALL'?`All characters · ${visibleAnime.length}`:`${animeCollection==='BONUS'?'Black Clover':animeCollection} · ${visibleAnime.length} characters`}</strong><span>Original editable SVG portraits</span></div>
+            {visibleAnime.length?<div className="anime-grid">{visibleAnime.map(preset=><button key={preset.name} className={`anime-card ${avatar.anime===preset.name?'selected':''}`} aria-pressed={avatar.anime===preset.name} title={`${preset.name} · ${preset.subtitle}`} onClick={()=>{change({...initialAvatar,...preset.changes});setAnimeOpen(false);setPhotobooth(false)}}><span className="anime-avatar" aria-hidden="true"><Avatar avatar={{...initialAvatar,...preset.changes}} width={112} height={112}/></span><span className="anime-name">{preset.name}</span><span className="anime-series">{preset.subtitle}</span></button>)}</div>:<p className="anime-empty">No characters found. Try another name or series.</p>}
+            <button className="classic-return" onClick={()=>{change(classicAvatar);setAnimeOpen(false);setPhotobooth(false)}}>Use classic bot look</button>
+          </div>}
         </div>
         <a className="feedback" href="https://github.com/ariefzzz5421/bot-PFP/issues/new" target="_blank" rel="noopener noreferrer"><MessageSquare size={16}/> <span>Feedback</span></a><button className="pill-button" onClick={copyLink}><LinkIcon size={17}/> Copy link</button>
       </div>

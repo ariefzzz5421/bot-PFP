@@ -1,0 +1,89 @@
+/* Hallmark · pre-emit critique: P4 H4 E4 S5 R4 V4 */
+:root{--page:#161618;--panel:#1e1e20;--raised:#27272a;--raised-hover:#303034;--line:#303034;--text:#f3f0ed;--muted:#96949d;--soft:#c5c3cb;--accent:#c9ddfa;--selected:#f3f0ec;--font-ui:Inter,ui-sans-serif,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-family:var(--font-ui);color:var(--text);background:var(--page);font-synthesis:none;text-rendering:optimizeLegibility;-webkit-font-smoothing:antialiased}
+*,*::before,*::after{box-sizing:border-box}
+html,body,#root{margin:0;min-height:100%;width:100%;overflow-x:clip}
+button,a{-webkit-tap-highlight-color:transparent}
+button{font:inherit;cursor:pointer}
+button:focus-visible,a:focus-visible{outline:2px solid var(--accent);outline-offset:3px}
+button:disabled{cursor:default;opacity:.37}
+svg{display:block;max-width:100%}
+.app-shell{min-height:100dvh;display:flex;flex-direction:column;max-width:1900px;margin:auto;padding:17px 24px 22px;gap:20px}
+.topbar{height:40px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex:none}
+.brand{display:flex;align-items:center;gap:10px;text-decoration:none;color:var(--text);white-space:nowrap}
+.brand-icon{width:34px;height:34px;border-radius:8px;overflow:hidden;background:var(--accent);flex:none}
+.brand-icon svg{width:100%;height:100%}
+.brand strong{font-size:17px;letter-spacing:.005em;font-weight:750}
+.brand strong span{font-size:13px;color:#26292e;background:var(--accent);border-radius:11px;padding:2px 7px;margin-left:2px;font-weight:800}
+.top-actions{display:flex;align-items:center;gap:28px}
+.feedback{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:700;color:var(--muted);text-decoration:none;white-space:nowrap}
+.feedback:hover{color:var(--text)}
+.pill-button{height:39px;padding:0 16px;border:0;border-radius:22px;color:var(--text);background:var(--raised);display:inline-flex;align-items:center;justify-content:center;gap:8px;font-size:13px;font-weight:750;white-space:nowrap}
+.pill-button:hover{background:var(--raised-hover)}
+.pill-button.active{background:var(--selected);color:var(--page)}
+.workspace{display:grid;grid-template-columns:minmax(0,2.08fr) minmax(400px,.99fr);gap:22px;min-height:0;flex:1}
+.preview-panel,.editor-panel{border:1px solid var(--line);border-radius:28px;min-width:0;min-height:0;overflow:hidden}
+.preview-panel{position:relative;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:16px;background-color:#171719;background-image:radial-gradient(#323235 1px,transparent 1px);background-size:22px 22px;padding:58px 32px 48px}
+.preview-top{position:absolute;z-index:4;top:15px;right:15px;display:flex;gap:8px}
+.preview-top .pill-button{height:37px}
+.preview-center{width:min(100%,min(68vh,500px));aspect-ratio:1;border-radius:29px;overflow:hidden;box-shadow:0 15px 55px #0005;flex:none}
+.preview-center svg{width:100%;height:100%}
+.preview-center.sheet{border-radius:15px;width:min(100%,min(61vh,440px))}
+.preview-controls{display:flex;align-items:center;gap:10px;justify-content:center}
+.preview-controls button{border:0;background:var(--raised);color:var(--soft);width:38px;height:38px;border-radius:50%;display:flex;align-items:center;justify-content:center}
+.preview-controls button:hover:not(:disabled){background:var(--raised-hover);color:var(--text)}
+.preview-controls .randomize{width:auto;border-radius:20px;padding:0 13px;gap:7px;color:var(--text);font-size:13px;font-weight:750;white-space:nowrap}
+.looks-popover{position:absolute;z-index:8;top:15px;right:17px;width:min(382px,calc(100% - 34px));background:#222225;border:1px solid #38383d;border-radius:18px;padding:12px;box-shadow:0 14px 40px #0009}
+.looks-title{display:flex;align-items:center;justify-content:space-between;margin:0 0 7px;padding:2px 4px;font-size:14px}
+.looks-title button{border:0;background:none;color:var(--muted);width:30px;height:30px;display:grid;place-items:center}
+.looks-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px}
+.looks-grid button{border:0;background:none;color:var(--soft);font-size:11px;min-width:0;display:flex;flex-direction:column;align-items:center;gap:5px;padding:0 0 4px}
+.looks-grid button>span:last-child{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.look-thumb{width:100%;aspect-ratio:1;border:1px solid var(--line);border-radius:11px;overflow:hidden}
+.look-thumb svg{width:100%;height:100%}
+.looks-grid button:hover .look-thumb{border-color:var(--accent)}
+.editor-panel{background:var(--panel);display:flex;flex-direction:column}
+.editor-scroll{flex:1;min-height:0;display:flex;flex-direction:column;overflow:auto;scrollbar-width:thin;scrollbar-color:#38383b transparent}
+.tabs{position:sticky;top:0;z-index:3;background:var(--panel);display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:1px;padding:17px 24px 13px}
+.tabs::before{content:"";position:absolute;inset:17px 24px 13px;background:#171719;border-radius:28px;z-index:-1}
+.tabs button{border:0;background:none;color:var(--muted);height:37px;padding:0 5px;min-width:0;border-radius:22px;font-size:12px;font-weight:750;white-space:nowrap}
+.tabs button.active{background:var(--selected);color:#202024}
+.tabs button:hover:not(.active){color:var(--text)}
+.editor-content{padding:2px 29px 22px;flex:1}
+.option-section{margin:0 0 26px}
+.option-section h2{font-size:13px;line-height:1.2;font-weight:770;margin:0 0 14px;color:var(--text)}
+.option-section h2 span{color:var(--muted);font-weight:500;margin-left:6px;font-size:12px}
+.option-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px 7px}
+.option-card{border:0;background:none;color:var(--muted);padding:0;min-width:0;display:flex;flex-direction:column;gap:6px;align-items:center}
+.thumb{width:100%;aspect-ratio:1;border:1px solid #363639;border-radius:15px;overflow:hidden;background:#1a1a1c;display:block;position:relative}
+.thumb svg{width:100%;height:100%;transition:transform .18s ease}
+.option-card:hover .thumb{border-color:#8b8a8f}
+.option-card:hover .thumb svg{transform:scale(1.06)}
+.option-card.is-selected{color:var(--text);font-weight:700}
+.option-card.is-selected .thumb{border-color:var(--selected);box-shadow:0 0 0 2px var(--panel),0 0 0 4px var(--selected)}
+.option-label{font-size:11px;line-height:1.2;max-width:100%;min-height:25px;display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.segmented{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));background:#171719;border-radius:21px;padding:2px;max-width:320px}
+.segmented button{border:0;background:none;color:var(--muted);height:36px;border-radius:19px;font-size:12px;font-weight:750;white-space:nowrap}
+.segmented button.active{background:var(--selected);color:#202024}
+.color-section{margin-bottom:24px}
+.swatches{display:flex;flex-wrap:wrap;gap:10px 9px}
+.swatch{width:34px;height:34px;flex:none;border-radius:50%;border:0;background:var(--swatch);position:relative}
+.swatch:hover{transform:translateY(-2px)}
+.swatch.is-selected::after{content:"";position:absolute;inset:-4px;border:2px solid var(--selected);border-radius:50%}
+.special-toggle{border:1px solid var(--line);background:var(--raised);color:var(--soft);padding:12px 15px;display:flex;align-items:center;gap:10px;border-radius:14px;font-size:13px}
+.special-toggle.is-selected{border-color:var(--accent);color:var(--accent)}
+.help-text{color:var(--muted);font-size:12px;margin:-13px 0 18px}
+.editor-credit{font-size:11px;color:#77757d;display:flex;align-items:center;justify-content:center;gap:3px;margin:auto 0 9px;padding-top:12px}
+.editor-credit svg{color:#c75175}
+.editor-credit a{color:inherit;text-decoration:underline;text-underline-offset:2px}
+.download-bar{flex:none;display:grid;grid-template-columns:minmax(0,1fr) 47px 47px 47px;gap:7px;padding:13px 14px 14px;border-top:1px solid var(--line)}
+.download-bar button{height:48px;border:1px solid #3a3a3d;border-radius:14px;background:#222225;color:var(--soft);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px;white-space:nowrap}
+.download-bar button:hover{background:#303035;color:var(--text)}
+.download-bar .download-primary{gap:8px;background:var(--accent);border-color:var(--accent);color:#1e2630;font-size:14px;box-shadow:0 5px 18px #b9d4ff33}
+.download-bar .download-primary:hover{background:#d5e4fc;color:#1e2630}
+.toast{position:fixed;z-index:20;left:50%;bottom:22px;transform:translateX(-50%);background:#35353b;border:1px solid #56565d;color:var(--text);padding:11px 16px;border-radius:13px;box-shadow:0 10px 34px #0008;font-size:13px;font-weight:650;white-space:nowrap}
+@media (min-width:900px){.app-shell{height:100dvh}.editor-panel{max-height:calc(100dvh - 99px)}}
+@media (max-width:1100px){.workspace{grid-template-columns:minmax(0,1.45fr) minmax(365px,1fr);gap:16px}.app-shell{padding:14px 16px 17px;gap:15px}.editor-content{padding-inline:20px}.tabs{padding-inline:15px}.tabs::before{inset-inline:15px}}
+@media (max-width:899px){.workspace{display:flex;flex-direction:column}.preview-panel{min-height:510px}.preview-center{width:min(67vw,420px)}.editor-panel{min-height:540px}.editor-scroll{overflow:visible}.tabs{position:sticky}.editor-content{padding-bottom:8px}.editor-credit{padding-bottom:12px}.download-bar{position:sticky;bottom:0;background:var(--panel);z-index:3}}
+@media (max-width:600px){.app-shell{padding:12px 12px 18px;gap:13px}.topbar{height:38px}.top-actions{gap:12px}.feedback span{display:none}.feedback svg{width:18px;height:18px}.top-actions .pill-button{height:36px;padding:0 11px;font-size:12px}.workspace{gap:12px}.preview-panel,.editor-panel{border-radius:23px}.preview-panel{min-height:390px;padding:58px 17px 19px;gap:11px}.preview-top{top:13px;right:13px;gap:6px}.preview-top .pill-button{height:34px;padding:0 11px;font-size:11px}.preview-top .pill-button svg{width:15px}.preview-center{width:min(69vw,310px);border-radius:20px}.preview-center.sheet{width:min(69vw,310px)}.preview-controls button{height:34px;width:34px}.preview-controls .randomize{font-size:12px}.editor-panel{min-height:500px}.tabs{padding:14px 11px 12px}.tabs::before{inset:14px 11px 12px}.tabs button{font-size:11px;padding:0 1px;height:36px}.editor-content{padding:4px 18px 12px}.option-grid{gap:9px 7px}.thumb{border-radius:12px}.swatch{width:31px;height:31px}.download-bar{grid-template-columns:minmax(0,1fr) 42px 42px 42px;padding:10px;gap:5px}.download-bar button{height:44px;border-radius:12px}.download-bar .download-primary{font-size:13px}.looks-popover{top:12px;right:12px}.looks-grid{gap:5px}}
+@media (max-width:370px){.brand strong{font-size:15px}.brand-icon{width:31px;height:31px}.tabs button{font-size:10px}.preview-center{width:73vw}.preview-top .pill-button{padding:0 8px}.download-bar{grid-template-columns:minmax(0,1fr) 40px 40px 40px}}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;transition-duration:.01ms!important;animation-duration:.01ms!important}}
